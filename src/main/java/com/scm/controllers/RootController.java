@@ -11,6 +11,7 @@ import com.scm.entities.User;
 import com.scm.helpers.Helper;
 import com.scm.services.UserService;
 
+//    Provide Logged in Information to All pages using ControllerAdvice
 @ControllerAdvice
 public class RootController {
 
