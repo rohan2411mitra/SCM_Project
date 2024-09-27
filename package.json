@@ -1,0 +1,15 @@
+{
+  "name": "smart_contact_manager",
+  "version": "1.0.0",
+  "description": "A smart contact manager using SpringBoot",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rohan Mitra",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.4.10"
+  }
+}
