@@ -15,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -30,20 +29,20 @@ public class PageController {
         return "redirect:/home";
     }
 
-    @RequestMapping("/home")
+    @GetMapping("/home")
     public String home(Model model){
         System.out.println("Home Page handler");
         model.addAttribute("name","Substring Technologies");
         return "home";
     }
 
-    @RequestMapping("/about")
+    @GetMapping("/about")
     public String aboutPage(){
         System.out.println("About Page Loading");
         return "about";
     }
 
-    @RequestMapping("/services")
+    @GetMapping("/services")
     public String servicesPage(){
         System.out.println("Services Page Loading");
         return "services";

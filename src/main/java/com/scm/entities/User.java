@@ -45,23 +45,28 @@ public class User implements UserDetails{
     private String phoneNumber;
 
     // Verification
-    @Getter(value = AccessLevel.NONE)
+    @Builder.Default
     private boolean enabled=false;
 
+    @Builder.Default
     private boolean emailVerified=false;
+    @Builder.Default
     private boolean phoneVerified=false;
 
     // Method of sign in
     @Enumerated(value = EnumType.STRING)
+    @Builder.Default
     private Providers provider=  Providers.SELF;
     private String providerUserId;
 
     // Stored Contacts
     // Cascade to make sure when user delete all mappings are updated to remove it
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @Builder.Default
     private List<Contact> contacts = new ArrayList<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
+    @Builder.Default
     private List<String> roleList = new ArrayList<>();
 
     @Override
