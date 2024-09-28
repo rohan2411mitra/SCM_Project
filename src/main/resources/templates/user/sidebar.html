@@ -8,7 +8,7 @@
             class="h-full pt-16 px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800"
     >
         <a
-                href="/"
+                data-th-href=@{/user/profile}
                 class="flex flex-col items-center ps-2.5 mb-8"
         >
             <img
@@ -19,7 +19,7 @@
                     alt="Flowbite Logo"
             />
 
-            <span class="text-gray-500" data-th-text="${loggedInUser.name}"
+            <span class="text-gray-600 dark:text-gray-400" data-th-text="${loggedInUser.name}"
             >John Doe</span
             >
             <span
