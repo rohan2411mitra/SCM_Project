@@ -30,6 +30,7 @@ public class Contact {
     private String phoneNumber;
     private String address;
     private String picture;
+    private String cloudinaryImagePublicId;
 
     @Column(length = 5000)
     private String description;
@@ -38,7 +39,7 @@ public class Contact {
     private String websiteLink;
     private String linkedInLink;
     // private List<String> socialLinks=new ArrayList<>();
-    private String cloudinaryImagePublicId;
+
 
     // Contact and Users relation
     @ManyToOne

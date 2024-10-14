@@ -34,13 +34,12 @@ public class ImageServiceImpl implements ImageService {
             cloudinary.uploader().upload(data, ObjectUtils.asMap(
                     "public_id", filename));
 
+            // Returning the URL of Image
             return this.getUrlFromPublicId(filename);
         } catch (IOException e) {
             logger.error("An error occurred while processing the request", e);
             return null;
         }
-
-        // Returning the URL of Image
 
     }
 
