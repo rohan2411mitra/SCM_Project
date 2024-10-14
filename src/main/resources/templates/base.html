@@ -20,6 +20,7 @@
     <title data-th-replace="${title}">Base Page</title>
   </head>
   <body class="h-screen w-full bg-orange-100 dark:bg-blue-900 dark:text-white">
+
     <!-- Headers -->
     <!--  User is Logged in : Navbar -->
     <div data-th-if="${loggedInUser}">
@@ -30,7 +31,6 @@
     <div data-th-unless="${loggedInUser}">
       <div data-th-replace="~{navbar :: navbar}"></div>
     </div>
-
 
     <!-- Main Content -->
     <div class="p-4">

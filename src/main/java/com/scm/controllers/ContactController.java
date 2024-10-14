@@ -63,10 +63,10 @@ public class ContactController {
             return "user/add_contact";
         }
 
-        String username = Helper.getEmailOfLoggedInUser(authentication);
+        String email = Helper.getEmailOfLoggedInUser(authentication);
 
 
-        User user = userService.getUserByEmail(username);
+        User user = userService.getUserByEmail(email);
 
         // Create contact entity
         Contact contact = new Contact();
@@ -80,9 +80,10 @@ public class ContactController {
         contact.setLinkedInLink(contactForm.getLinkedInLink());
         contact.setWebsiteLink(contactForm.getWebsiteLink());
 
-        // TO DO: Process the Image
+        //Process the Image
+        logger.info("File information : {}",contactForm.getContactImage().getOriginalFilename());
 
-        contactService.save(contact);
+//        contactService.save(contact);
         System.out.println(contactForm);
 
         // Set message to be displayed

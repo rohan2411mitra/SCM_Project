@@ -14,7 +14,7 @@ import com.scm.entities.User;
 
 @Repository
 public interface ContactRepo extends JpaRepository<Contact, String> {
-    // find the Contact by user
+    // Find the Contact by user
     Page<Contact> findByUser(User user, Pageable pageable);
 
     // Custom Query method
