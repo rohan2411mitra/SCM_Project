@@ -60,7 +60,7 @@ public class OAuthAuthenticationSuccessHandler implements AuthenticationSuccessH
 
         if (authorizedClientRegistrationId.equalsIgnoreCase("google")) {
 
-            // google
+            // Google
             // google attributes
 
             user.setEmail(oauthUser.getAttribute("email").toString());
@@ -72,7 +72,7 @@ public class OAuthAuthenticationSuccessHandler implements AuthenticationSuccessH
 
         } else if (authorizedClientRegistrationId.equalsIgnoreCase("github")) {
 
-            // github
+            // Github
             // github attributes
             String email = oauthUser.getAttribute("email") != null ? oauthUser.getAttribute("email").toString()
                     : oauthUser.getAttribute("login").toString() + "@gmail.com";

@@ -3,6 +3,7 @@ package com.scm.controllers;
 import com.scm.entities.Contact;
 import com.scm.entities.User;
 import com.scm.forms.ContactForm;
+import com.scm.helpers.AppConstants;
 import com.scm.helpers.Helper;
 import com.scm.helpers.Message;
 import com.scm.helpers.MessageType;
@@ -18,11 +19,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -106,5 +105,23 @@ public class ContactController {
                         .build());
 
         return "redirect:/user/contacts/add";
+    }
+
+//    View Contacts
+    @RequestMapping
+    public String viewContacts(
+            Model model,
+            Authentication authentication) {
+
+        // Load all the user contacts
+        String email = Helper.getEmailOfLoggedInUser(authentication);
+
+        User user = userService.getUserByEmail(email);
+
+        List<Contact> contacts = contactService.getByUser(user);
+
+        model.addAttribute("contacts",contacts);
+
+        return "user/contacts";
     }
 }

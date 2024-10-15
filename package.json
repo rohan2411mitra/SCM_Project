@@ -9,7 +9,7 @@
   },
   "author": "Rohan Mitra",
   "license": "ISC",
-  "devDependencies": {
-    "tailwindcss": "^3.4.10"
+  "dependencies": {
+    "tailwindcss": "^3.4.14"
   }
 }
