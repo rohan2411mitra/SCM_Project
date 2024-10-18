@@ -15,13 +15,13 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -110,6 +110,10 @@ public class ContactController {
 //    View Contacts
     @RequestMapping
     public String viewContacts(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = AppConstants.PAGE_SIZE + "") int size,
+            @RequestParam(value = "sortBy", defaultValue = "name") String sortBy,
+            @RequestParam(value = "direction", defaultValue = "asc") String direction,
             Model model,
             Authentication authentication) {
 
@@ -118,9 +122,11 @@ public class ContactController {
 
         User user = userService.getUserByEmail(email);
 
-        List<Contact> contacts = contactService.getByUser(user);
+        Page<Contact> pageContact = contactService.getByUser(user, page, size, sortBy, direction);
 
-        model.addAttribute("contacts",contacts);
+        model.addAttribute("pageContact", pageContact);
+        model.addAttribute("pageSize", AppConstants.PAGE_SIZE);
+
 
         return "user/contacts";
     }

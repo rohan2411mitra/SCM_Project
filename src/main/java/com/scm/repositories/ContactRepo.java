@@ -15,10 +15,16 @@ import com.scm.entities.User;
 @Repository
 public interface ContactRepo extends JpaRepository<Contact, String> {
     // Find the Contact by user
-    List<Contact> findByUser(User user);
+    Page<Contact> findByUser(User user, Pageable pageable);
 
     // Custom Query method
     @Query("SELECT c FROM Contact c WHERE c.user.id = :userId")
     List<Contact> findByUserId(@Param("userId") String userId);
+
+    Page<Contact> findByUserAndNameContaining(User user, String namekeyword, Pageable pageable);
+
+    Page<Contact> findByUserAndEmailContaining(User user, String emailkeyword, Pageable pageable);
+
+    Page<Contact> findByUserAndPhoneNumberContaining(User user, String phonekeyword, Pageable pageable);
 
 }
