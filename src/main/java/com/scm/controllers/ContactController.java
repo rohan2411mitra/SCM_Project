@@ -3,6 +3,7 @@ package com.scm.controllers;
 import com.scm.entities.Contact;
 import com.scm.entities.User;
 import com.scm.forms.ContactForm;
+import com.scm.forms.ContactSearchForm;
 import com.scm.helpers.AppConstants;
 import com.scm.helpers.Helper;
 import com.scm.helpers.Message;
@@ -50,10 +51,11 @@ public class ContactController {
     }
 
     @PostMapping(value = "/add")
-    public String saveContact(@Valid @ModelAttribute ContactForm contactForm, BindingResult result, Authentication authentication, HttpSession session) {
+    public String saveContact(@Valid @ModelAttribute ContactForm contactForm, BindingResult result,
+            Authentication authentication, HttpSession session) {
         // Process the form data
 
-//        Check if there are errors
+        // Check if there are errors
         if (result.hasErrors()) {
 
             result.getAllErrors().forEach(error -> logger.info(error.toString()));
@@ -67,7 +69,6 @@ public class ContactController {
         }
 
         String email = Helper.getEmailOfLoggedInUser(authentication);
-
 
         User user = userService.getUserByEmail(email);
 
@@ -83,8 +84,8 @@ public class ContactController {
         contact.setLinkedInLink(contactForm.getLinkedInLink());
         contact.setWebsiteLink(contactForm.getWebsiteLink());
 
-        //Process the Image
-        logger.info("File information : {}",contactForm.getContactImage().getOriginalFilename());
+        // Process the Image
+        logger.info("File information : {}", contactForm.getContactImage().getOriginalFilename());
 
         if (contactForm.getContactImage() != null && !contactForm.getContactImage().isEmpty()) {
             String filename = UUID.randomUUID().toString();
@@ -107,7 +108,7 @@ public class ContactController {
         return "redirect:/user/contacts/add";
     }
 
-//    View Contacts
+    // View Contacts
     @RequestMapping
     public String viewContacts(
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -124,10 +125,42 @@ public class ContactController {
 
         Page<Contact> pageContact = contactService.getByUser(user, page, size, sortBy, direction);
 
+        model.addAttribute("contactSearchForm", new ContactSearchForm());
         model.addAttribute("pageContact", pageContact);
         model.addAttribute("pageSize", AppConstants.PAGE_SIZE);
 
-
         return "user/contacts";
+    }
+
+    @RequestMapping("/search")
+    public String searchHandler(
+            @ModelAttribute ContactSearchForm contactSearchForm,
+            @RequestParam(value = "size", defaultValue = AppConstants.PAGE_SIZE + "") int size,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "sortBy", defaultValue = "name") String sortBy,
+            @RequestParam(value = "direction", defaultValue = "asc") String direction,
+            Model model,
+            Authentication authentication) {
+
+        logger.info("field {} keyword {}", contactSearchForm.getField(), contactSearchForm.getValue());
+
+        var user = userService.getUserByEmail(Helper.getEmailOfLoggedInUser(authentication));
+
+        Page<Contact> pageContact = null;
+        if (contactSearchForm.getField().equalsIgnoreCase("name")) {
+            pageContact = contactService.searchByName(contactSearchForm.getValue(), size, page, sortBy, direction, user);
+        } else if (contactSearchForm.getField().equalsIgnoreCase("email")) {
+            pageContact = contactService.searchByEmail(contactSearchForm.getValue(), size, page, sortBy, direction, user);
+        } else if (contactSearchForm.getField().equalsIgnoreCase("phone")) {
+            pageContact = contactService.searchByPhoneNumber(contactSearchForm.getValue(), size, page, sortBy, direction, user);
+        }
+
+        logger.info("Search Results:- {}", pageContact);
+
+        model.addAttribute("contactSearchForm", contactSearchForm);
+        model.addAttribute("pageContact", pageContact);
+        model.addAttribute("pageSize", AppConstants.PAGE_SIZE);
+
+        return "user/search";
     }
 }
