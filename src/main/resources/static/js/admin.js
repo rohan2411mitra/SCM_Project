@@ -1,3 +1,5 @@
+//To show image preview while adding contact
+
 console.log("Admin User");
 
 document

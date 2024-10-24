@@ -1,3 +1,5 @@
+//To control theme change
+
 console.log("Script loaded");
 
 let currentTheme = getTheme();
