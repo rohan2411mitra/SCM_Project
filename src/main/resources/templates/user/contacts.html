@@ -169,7 +169,11 @@
                             <button data-th-onclick="deleteContact([[${c.id}]])">
                                 <i class="fa-solid w-6 h-6 fa-trash"></i>
                             </button>
-                            <i class="fa-solid w-6 h-6 fa-pen"></i>
+
+<!--                            Update Contact-->
+                            <a data-th-href="@{'/user/contacts/view/'+*{id}}">
+                                <i class="fa-solid w-6 h-6 fa-pen"></i>
+                            </a>
 
 <!--                            View Contact -->
                             <button data-th-onclick="loadContactData([[${c.id}]])">

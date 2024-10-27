@@ -40,18 +40,18 @@ public class ContactController {
     @Autowired
     private ContactService contactService;
 
+//    Add Contacts
     @GetMapping("/add")
     // add contact page: handler
     public String addContactView(Model model) {
         ContactForm contactForm = new ContactForm();
-
-        contactForm.setFavorite(true);
         model.addAttribute("contactForm", contactForm);
         return "user/add_contact";
     }
 
     @PostMapping(value = "/add")
-    public String saveContact(@Valid @ModelAttribute ContactForm contactForm, BindingResult result,
+    public String saveContact(
+            @Valid @ModelAttribute ContactForm contactForm, BindingResult result,
             Authentication authentication, HttpSession session) {
         // Process the form data
 
@@ -92,7 +92,6 @@ public class ContactController {
             String fileURL = imageService.uploadImage(contactForm.getContactImage(), filename);
             contact.setPicture(fileURL);
             contact.setCloudinaryImagePublicId(filename);
-
         }
 
         contactService.save(contact);
@@ -132,6 +131,7 @@ public class ContactController {
         return "user/contacts";
     }
 
+//    Search Contacts
     @RequestMapping("/search")
     public String searchHandler(
             @ModelAttribute ContactSearchForm contactSearchForm,
@@ -179,5 +179,84 @@ public class ContactController {
 
         );
         return "redirect:/user/contacts";
+    }
+
+//    Update Contacts
+    @GetMapping("/view/{contactId}")
+    public String updateContactFormView(
+            @PathVariable("contactId") String contactId,
+            Model model
+    ){
+        var contact = contactService.getById(contactId);
+        ContactForm contactForm = new ContactForm();
+        contactForm.setName(contact.getName());
+        contactForm.setEmail(contact.getEmail());
+        contactForm.setPhoneNumber(contact.getPhoneNumber());
+        contactForm.setAddress(contact.getAddress());
+        contactForm.setDescription(contact.getDescription());
+        contactForm.setFavorite(contact.isFavorite());
+        contactForm.setWebsiteLink(contact.getWebsiteLink());
+        contactForm.setLinkedInLink(contact.getLinkedInLink());
+        contactForm.setPicture(contact.getPicture());
+        model.addAttribute("contactForm", contactForm);
+        model.addAttribute("contactId", contactId);
+
+        return "user/update_contact_view";
+    }
+
+    @PostMapping(value = "/update/{contactId}")
+    public String updateContact(
+            @PathVariable("contactId") String contactId,
+            @Valid @ModelAttribute ContactForm contactForm,
+            BindingResult result,
+            Model model,
+            HttpSession session
+            )
+    {
+
+        // Update the contact
+        if (result.hasErrors()) {
+            result.getAllErrors().forEach(error -> logger.info(error.toString()));
+
+            session.setAttribute("message", Message.builder()
+                    .content("Please correct the following errors")
+                    .type(MessageType.red)
+                    .build());
+            return "user/update_contact_view";
+        }
+
+        var contact = contactService.getById(contactId);
+        contact.setId(contactId);
+        contact.setName(contactForm.getName());
+        contact.setEmail(contactForm.getEmail());
+        contact.setPhoneNumber(contactForm.getPhoneNumber());
+        contact.setAddress(contactForm.getAddress());
+        contact.setDescription(contactForm.getDescription());
+        contact.setFavorite(contactForm.isFavorite());
+        contact.setWebsiteLink(contactForm.getWebsiteLink());
+        contact.setLinkedInLink(contactForm.getLinkedInLink());
+
+        // Process the Image:
+        if (contactForm.getContactImage() != null && !contactForm.getContactImage().isEmpty()) {
+            logger.info("File is not Empty");
+            String fileName = UUID.randomUUID().toString();
+            String imageUrl = imageService.uploadImage(contactForm.getContactImage(), fileName);
+            contact.setCloudinaryImagePublicId(fileName);
+            contact.setPicture(imageUrl);
+            contactForm.setPicture(imageUrl);
+        } else {
+            logger.info("File is Empty");
+        }
+
+        var updateCon = contactService.update(contact);
+        logger.info("Updated Contact {}", updateCon);
+
+        session.setAttribute("message",
+                Message.builder()
+                        .content("Contact Updated!")
+                        .type(MessageType.green)
+                        .build());
+
+        return "redirect:/user/contacts/view/" + contactId;
     }
 }
