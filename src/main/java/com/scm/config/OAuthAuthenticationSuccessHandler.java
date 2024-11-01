@@ -73,7 +73,7 @@ public class OAuthAuthenticationSuccessHandler implements AuthenticationSuccessH
         } else if (authorizedClientRegistrationId.equalsIgnoreCase("github")) {
 
             // Github
-            // github attributes
+            // Github attributes
             String email = oauthUser.getAttribute("email") != null ? oauthUser.getAttribute("email").toString()
                     : oauthUser.getAttribute("login").toString() + "@gmail.com";
             String picture = oauthUser.getAttribute("avatar_url").toString();

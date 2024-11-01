@@ -1,15 +1,23 @@
 package com.scm.config;
 
 import com.scm.services.implementations.SecurityCustomUserDetailService;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
+import java.io.IOException;
 
 @Configuration
 public class SecurityConfig {
@@ -18,6 +26,9 @@ public class SecurityConfig {
     private SecurityCustomUserDetailService userDetailService;
     @Autowired
     private OAuthAuthenticationSuccessHandler handler;
+
+    @Autowired
+    private AuthFailureHandler authFailureHandler;
 
     // Configuration of authentication provider for spring security
     @Bean
@@ -53,32 +64,7 @@ public class SecurityConfig {
             formLogin.usernameParameter("email");
             formLogin.passwordParameter("password");
 
-            // formLogin.failureHandler(new AuthenticationFailureHandler() {
-
-            // @Override
-            // public void onAuthenticationFailure(HttpServletRequest request,
-            // HttpServletResponse response,
-            // AuthenticationException exception) throws IOException, ServletException {
-            // // TODO Auto-generated method stub
-            // throw new UnsupportedOperationException("Unimplemented method
-            // 'onAuthenticationFailure'");
-            // }
-
-            // });
-
-            // formLogin.successHandler(new AuthenticationSuccessHandler() {
-
-            // @Override
-            // public void onAuthenticationSuccess(HttpServletRequest request,
-            // HttpServletResponse response,
-            // Authentication authentication) throws IOException, ServletException {
-            // // TODO Auto-generated method stub
-            // throw new UnsupportedOperationException("Unimplemented method
-            // 'onAuthenticationSuccess'");
-            // }
-
-            // });
-//            formLogin.failureHandler(new authFailtureHandler);
+            formLogin.failureHandler( authFailureHandler);
         });
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable);

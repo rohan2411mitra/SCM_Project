@@ -6,7 +6,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Helper {
+public class  Helper {
 
     public static String getEmailOfLoggedInUser(Authentication authentication) {
 
@@ -41,4 +41,9 @@ public class Helper {
 
     }
 
+    public static String getLinkForEmailVerificatiton(String emailToken) {
+
+        return "http://localhost:8081/auth/verify-email?token=" + emailToken;
+
+    }
 }

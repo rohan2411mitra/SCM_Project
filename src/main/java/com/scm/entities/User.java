@@ -69,6 +69,8 @@ public class User implements UserDetails{
     @Builder.Default
     private List<String> roleList = new ArrayList<>();
 
+    private String emailToken;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // list of roles[USER,ADMIN] converted to
