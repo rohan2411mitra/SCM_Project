@@ -18,15 +18,14 @@
             <p data-th-text="${pageContact.totalElements}+' results found'"></p>
         </div>
         <div class="contacts_container p-5">
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                <div data-th-replace="~{message :: messagebox}"></div>
+            <div class="flex md:flex-row flex-col items-center px-4 justify-between bg-white dark:bg-gray-900">
                 <form
                         data-th-object="${contactSearchForm}"
                         action=""
                         data-th-action="@{'/user/contacts/search'}"
                 >
                     <div
-                            class="flex p-5 space-x-5 items-center justify-start flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900"
+                            class="flex p-5 space-x-5 items-center justify-start flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4"
                     >
                         <!-- How to search   -->
                         <div>
@@ -65,8 +64,8 @@
                             </div>
                             <input
                                     data-th-field="*{value}"
+                                    type="text"
                                     id="table-search-users"
-                                    name="keyword"
                                     class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="Search for users"
                             />
@@ -79,7 +78,20 @@
                         </button>
                     </div>
                 </form>
+                <div>
+                    <button
+                            type="button"
+                            onclick="exportData()"
+                            class="px-3 py-2 bg-green-800 text-white rounded"
+                    >
+                        Export
+                    </button>
+                </div>
+            </div>
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <div data-th-replace="~{message :: messagebox}"></div>
                 <table
+                        id="contact-table"
                         data-th-if="${pageContact.totalElements>0}"
                         class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
                 >
@@ -91,7 +103,7 @@
                         <th scope="col" class="px-6 py-3">Phone</th>
                         <th scope="col" class="px-6 py-3">Favorite</th>
                         <th scope="col" class="px-6 py-3">Links</th>
-                        <th scope="col" class="px-6 py-3">Action</th>
+                        <th scope="col" class="px-6 py-3" data-exclude="true">Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -141,6 +153,7 @@
                                         data-th-if="*{favorite}"
                                         class="pl-4"
                                 >
+                                    <span style="display: none;">Favorite</span>
                                     <i class="fa-solid fa-star"></i>
                                 </div>
                             </div>
@@ -150,22 +163,22 @@
                                 <a
                                         data-th-href="@{*{websiteLink}}"
                                         target="_blank"
-                                ><i
-                                        class="fa-solid w-6 h-6 fa-link"
-                                ></i
-                                ></a>
+                                >
+                                    <i class="fa-solid w-6 h-6 fa-link"></i>
+                                </a>
+                                <span data-th-text="@{*{websiteLink}}" style="display: none;"></span>
 
                                 <a
                                         data-th-href="@{*{linkedInLink}}"
                                         target="_blank"
                                 >
-                                    <i
-                                            class="fa-brands w-6 h-6 fa-linkedin"
-                                    ></i>
+                                    <i class="fa-brands w-6 h-6 fa-linkedin"></i>
                                 </a>
+                                <span data-th-text="@{*{linkedInLink}}" style="display: none;"></span>
+
                             </div>
                         </td>
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4" data-exclude="true">
 
 <!--                            Delete Contact-->
                             <button data-th-onclick="deleteContact([[${c.id}]])">
@@ -238,6 +251,17 @@
 <script data-th-src="@{/js/contacts.js}"></script>
 <script>
     console.log("This is search result page");
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@linways/table-to-excel@1.0.4/dist/tableToExcel.min.js"></script>
+<script>
+    function exportData() {
+      TableToExcel.convert(document.getElementById("contact-table"), {
+        name: "contacts.xlsx",
+        sheet: {
+          name: "Sheet 1",
+        },
+      });
+    }
 </script>
 </body>
 </html>
