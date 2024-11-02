@@ -152,8 +152,15 @@
                                         data-th-if="*{favorite}"
                                         class="pl-4"
                                 >
-                                    <span style="display: none;">Favorite</span>
+                                    <span style="display: none;">Favorite Contact</span>
                                     <i class="fa-solid fa-star"></i>
+                                </div>
+                                <div
+                                        data-th-if="!(*{favorite})"
+                                        class="pl-4"
+                                >
+                                    <span style="display: none;">Not Favorite Contact</span>
+                                    <i class="fa-regular fa-star"></i>
                                 </div>
                             </div>
                         </td>

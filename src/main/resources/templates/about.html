@@ -1,15 +1,38 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" data-th-replace="~{base :: parent(~{::#content},~{::title},~{::script})}">
 <head>
-    <title>About Page</title>
+    <title>About Us</title>
 </head>
 <body>
-<div id="content" class="pt-16">
-    <h1>Welcome to about page</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, odit.</p>
+<div id="content" class="mt-4 pt-16">
+    <!-- Banner Section -->
+    <section class="bg-blue-600 text-white py-20 animate__animated animate__fadeInDown">
+        <div class="container mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-4">About Us</h2>
+            <p class="text-lg mb-8">Learn more about our mission and vision.</p>
+        </div>
+    </section>
+
+    <!-- Our Story Section -->
+    <section class="py-20 bg-white dark:bg-gray-800">
+        <div class="container mx-auto text-center">
+            <h2 class="text-3xl font-bold mb-12 dark:text-white">Our Story</h2>
+            <p class="text-gray-600 dark:text-gray-400">We started with a simple idea: to help people manage their contacts effectively and securely. Over the years, we've grown into a trusted platform for thousands of users.</p>
+        </div>
+    </section>
+
+    <!-- Our Mission Section -->
+    <section class="py-20 bg-gray-100 dark:bg-gray-800">
+        <div class="container mx-auto text-center">
+            <h2 class="text-3xl font-bold mb-12 dark:text-white">Our Mission</h2>
+            <p class="text-gray-600 dark:text-gray-400">Our mission is to provide the best contact management solutions that are secure, user-friendly, and accessible to everyone.</p>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
 </div>
 <script>
-    console.log("About")
+    console.log("About Us page");
 </script>
 </body>
 </html>

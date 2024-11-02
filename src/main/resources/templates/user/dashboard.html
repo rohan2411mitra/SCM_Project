@@ -1,32 +1,81 @@
 <!DOCTYPE html>
 <html
-    lang="en"
-    data-th-replace="~{base :: parent(~{::#content},~{::title},~{::script})}"
+        lang="en"
+        data-th-replace="~{base :: parent(~{::#content},~{::title},~{::script})}"
 >
-    <head>
-        <title data-th-text="${loggedInUser.name}+' |  Dashboard'">
-            Dashboard Page
-        </title>
-    </head>
-    <body>
-        <div id="content">
-            <div data-th-if="${loggedInUser}">
-                <div data-th-replace="~{user/sidebar :: sidebar}"></div>
-            </div>
+<head>
+    <title>User Dashboard</title>
+</head>
+<body>
+<div id="content">
+    <div data-th-if="${loggedInUser}">
+        <div data-th-replace="~{user/sidebar :: sidebar}"></div>
+    </div>
 
-            <div class="sm:pl-64 pt-12" style="height: 1000px">
-                <div class="flex items-center justify-center md:pt-20 flex-col">
-                    <h1 class="text-5xl">Welcome to Dashboard page</h1>
-                    <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Consequatur, ratione!
-                    </p>
+    <div class="sm:pl-64 pt-20">
+        <h1 class="text-5xl text-center">User Dashboard</h1>
+        <p class="text-center">Welcome back, <span data-th-text="${loggedInUser.name}">User</span>!</p>
+
+        <!-- Dashboard Overview -->
+        <div class="flex justify-center p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl w-full">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg">
+                    <h2 class="text-lg font-semibold">Total Contacts</h2>
+                    <p class="text-2xl" data-th-text="${pageContact.totalElements}">0</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg">
+                    <h2 class="text-lg font-semibold">Favorites</h2>
+                    <p class="text-2xl" data-th-text="${totalFavorites}">0</p>
                 </div>
             </div>
         </div>
 
-        <script>
-            console.log("This is dashboard page");
-        </script>
-    </body>
+        <!-- Recent Contacts Section -->
+        <!-- Recent Contacts Section -->
+        <div class="p-6">
+            <h2 class="text-3xl mb-4">Recent Contacts</h2>
+            <div class="relative overflow-hidden shadow-md sm:rounded-lg">
+                <div class="max-h-48 overflow-y-auto">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">Name</th>
+                            <th scope="col" class="px-6 py-3">Phone</th>
+                            <th scope="col" class="px-6 py-3">Email</th>
+                            <th scope="col" class="px-6 py-3">Favorite</th>
+                            <th scope="col" class="px-6 py-3">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-th-each="contact : ${pageContact.content}" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                            <td class="px-6 py-4" data-th-text="*{contact.name}">John Doe</td>
+                            <td class="px-6 py-4" data-th-text="*{contact.phoneNumber}">123-456-7890</td>
+                            <td class="px-6 py-4" data-th-text="*{contact.email}">john.doe@example.com</td>
+                            <td class="px-6 py-4">
+                                <i class="fa-solid fa-star" data-th-if="*{contact.favorite}"></i>
+                                <i class="fa-regular fa-star" data-th-if="!(*{contact.favorite})"></i>
+                            </td>
+                            <td class="px-6 py-4">
+                                <!-- Update Contact -->
+                                <a data-th-href="@{'/user/contacts/view/' + *{contact.id}}">
+                                    <i class="fa-solid w-6 h-6 fa-pen"></i> Modify
+                                </a>
+                            </td>
+                        </tr>
+                        <tr data-th-if="${pageContact.totalElements == 0}">
+                            <td colspan="5" class="text-2xl text-center p-4">No Recent Contacts</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<script>
+    console.log("This is the dashboard page");
+</script>
+</body>
 </html>
